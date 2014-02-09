@@ -1,6 +1,8 @@
 {-# LANGUAGE TemplateHaskell #-}
 {-# LANGUAGE FlexibleInstances #-}
 {-# LANGUAGE MultiParamTypeClasses #-}
+{-# LANGUAGE TypeFamilies #-}
+{-# LANGUAGE DeriveDataTypeable #-}
 
 ------------------------------------------------------------------------------
 -- | This module defines our application's state type and an alias for its
@@ -17,7 +19,7 @@ import Data.SafeCopy
 import Control.Applicative
 
 deriveSafeCopy 0 'base ''Database
-makeAcidic ''Database[]
+makeAcidic ''Database['addVolunteer]
 
 
 ------------------------------------------------------------------------------
