@@ -32,36 +32,18 @@ import qualified Codec.Crypto.RSA as RSA
 import           Crypto.PubKey.OpenSsh (decodePublic, OpenSshPublicKey)
 import           Crypto.Types.PubKey.RSA (PublicKey)
 import           Crypto.Random
-
+import           SharedTypes
+import           Snap.Snaplet.AcidState (Update, Query, Acid,
+                 HasAcid (getAcidStore), makeAcidic, update, query, acidInit)
 ------------------------------------------------------------------------------
 -- | The application's routes.
 routes :: [(ByteString, Handler App App ())]
 routes = [("/", form)]
 
 
-data Volunteer = Volunteer
-     {alias   :: T.Text
-    , emailAddress :: T.Text
-    , phoneNumber  :: T.Text
-    , feb24thNight  :: Bool
-    , feb25thMorning  :: Bool
-    , feb25thLunch  :: Bool
-    , feb26thMorning  :: Bool
-    , feb26thLunch  :: Bool
-    } deriving (Show)
-
-data VolunteerEncrypted = VolunteerEncrypted
-    {enc_alias   :: ByteString
-    , enc_emailAddress :: ByteString
-    , enc_phoneNumber  :: ByteString
-    , enc_feb24thNight  :: ByteString
-    , enc_feb25thMorning  :: ByteString
-    , enc_feb25thLunch  :: ByteString
-    , enc_feb26thMorning  :: ByteString
-    , enc_feb26thLunch  :: ByteString
-    } deriving (Show)
 
 
+n::Int
 n = 1024    
     
     
@@ -95,6 +77,7 @@ form = do
 app :: SnapletInit App App
 app = makeSnaplet "Encrypted Volunteer App" "A volunteer sign up app where data is encrypted at rest" Nothing $ do
     h <- nestSnaplet "" heist $ heistInit "templates"
+    ac <- nestSnaplet "acid" acid $ acidInit (Database [])
     addRoutes routes
-    return $ App h 
+    return $ App h ac
 

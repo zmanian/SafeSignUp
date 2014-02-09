@@ -40,6 +40,8 @@ Executable SafeSignUp
     RSA                       >= 2.0 && < 3.0,
     crypto-pubkey-types       >= 0.4.1 && < 0.5,
     crypto-api                >= 0.13 && < 0.14,
+    snaplet-acid-state        >= 0.2.6 && < 0.3,
+    safecopy                  >= 0.8.2 && < 0.9,
     xmlhtml                   >= 0.1
 
   if flag(old-base)
