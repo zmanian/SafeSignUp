@@ -29,12 +29,12 @@ import           Text.Digestive
 import           Text.Digestive.Heist
 import           Text.Digestive.Snap
 import qualified Codec.Crypto.RSA as RSA 
-import           Crypto.PubKey.OpenSsh (decodePublic, OpenSshPublicKey)
+import           Crypto.PubKey.OpenSsh (decodePublic, OpenSshPublicKey(..))
 import           Crypto.Types.PubKey.RSA (PublicKey)
 import           Crypto.Random
 import           SharedTypes
-import           Snap.Snaplet.AcidState (Update, Query, Acid,
-                 HasAcid (getAcidStore), makeAcidic, update, query, acidInit)
+import           Snap.Snaplet.AcidState (Update, Query, Acid, HasAcid (getAcidStore), makeAcidic, update, query, acidInit)
+import           Control.Monad.Trans
 ------------------------------------------------------------------------------
 -- | The application's routes.
 routes :: [(ByteString, Handler App App ())]
@@ -42,16 +42,21 @@ routes = [("/", form)]
 
 
 
+throwLeftDecode :: Either String OpenSshPublicKey -> PublicKey
+throwLeftDecode (Right (OpenSshPublicKeyRsa k _)) = k
+throwLeftDecode (Right _) = error "Wrong key type"
+throwLeftDecode (Left s)  = error $ "Error reading keys: " ++ s
+
 
 n::Int
 n = 1024    
     
     
-encyptfield :: SystemRandom -> PublicKey-> String -> ByteString
-encyptfield gen key field = toStrict $ fst $ RSA.encrypt gen key $ pack field
+encryptfield :: SystemRandom -> PublicKey-> String -> ByteString
+encryptfield gen key field = toStrict $ fst $ RSA.encrypt gen key $ pack field
 
 encryptVolunteer::SystemRandom -> Volunteer -> PublicKey ->VolunteerEncrypted 
-encryptVolunteer gen volunteer key = VolunteerEncrypted{enc_alias=encyptfield gen key (show $ alias  volunteer) , enc_emailAddress = encyptfield gen key (show $ emailAddress volunteer), enc_phoneNumber = encyptfield gen key (show $ phoneNumber volunteer), enc_feb24thNight =encyptfield gen key (show $ feb24thNight volunteer),enc_feb25thMorning =encyptfield gen key (show $ phoneNumber volunteer),enc_feb25thLunch =encyptfield gen key (show $ feb25thLunch volunteer),enc_feb26thMorning =encyptfield gen key (show $ feb26thMorning volunteer),enc_feb26thLunch =encyptfield gen key (show $ feb26thLunch volunteer) }
+encryptVolunteer gen volunteer key = VolunteerEncrypted{enc_alias=encryptfield gen key (show $ alias  volunteer) , enc_emailAddress = encryptfield gen key (show $ emailAddress volunteer), enc_phoneNumber = encryptfield gen key (show $ phoneNumber volunteer), enc_feb24thNight =encryptfield gen key (show $ feb24thNight volunteer),enc_feb25thMorning =encryptfield gen key (show $ phoneNumber volunteer),enc_feb25thLunch =encryptfield gen key (show $ feb25thLunch volunteer),enc_feb26thMorning =encryptfield gen key (show $ feb26thMorning volunteer),enc_feb26thLunch =encryptfield gen key (show $ feb26thLunch volunteer) }
 
 volunteerForm :: Monad m => Form T.Text m Volunteer
 volunteerForm = Volunteer
@@ -67,10 +72,12 @@ volunteerForm = Volunteer
 
 form :: Handler App App ()
 form = do
-    -- readFile  "Volunteer.pub_key" >>= decodePublic
-    (_, result) <- runForm "form" volunteerForm
-    -- print encryptVolunteer result
-    render "Test.html"
+    (_, result) <- runForm "volunteerForm" volunteerForm
+    case result of
+      Just new_vol -> do key_text <-liftIO $ readFile "Volunteer.pub_key"
+                         new_gen <- liftIO $ newGenIO
+                         update (AddVolunteer (encryptVolunteer new_gen new_vol (throwLeftDecode $ decodePublic (toStrict $ pack key_text))))
+      Nothing -> render "Test.html"
 
 ------------------------------------------------------------------------------
 -- | The application initializer.

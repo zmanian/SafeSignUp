@@ -42,6 +42,7 @@ Executable SafeSignUp
     crypto-api                >= 0.13 && < 0.14,
     snaplet-acid-state        >= 0.2.6 && < 0.3,
     safecopy                  >= 0.8.2 && < 0.9,
+    mtl                       >= 2.1 && < 2.2,
     xmlhtml                   >= 0.1
 
   if flag(old-base)
