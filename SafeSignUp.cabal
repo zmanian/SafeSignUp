@@ -71,3 +71,4 @@ Executable SafeSignUp
     else
       ghc-options: -threaded -Wall -fwarn-tabs -funbox-strict-fields -O2
                    -fno-warn-orphans
+
