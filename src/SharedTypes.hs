@@ -1,14 +1,15 @@
 {-# LANGUAGE RecordWildCards #-}
 {-# LANGUAGE DeriveDataTypeable  #-}
 
-module SharedTypes(Volunteer(..),VolunteerEncrypted(..), Database(..), putCopy, getCopy,addVolunteer) where
+module SharedTypes(Volunteer(..),VolunteerEncrypted(..), Database(..), putCopy, getCopy,addVolunteer, getVolunteers) where
 
 import qualified Data.Text as T
 import           Data.ByteString (ByteString)
 import Data.SafeCopy
 import Control.Applicative
 import           Data.Typeable (Typeable)
-import           Control.Monad.State( get, put )
+import           Control.Monad.State( get, put)
+import           Control.Monad.Reader( ask )
 
 import           Snap.Snaplet.AcidState (Update, Query, Acid,
                  HasAcid (getAcidStore), makeAcidic, update, query, acidInit)
@@ -21,6 +22,10 @@ addVolunteer :: VolunteerEncrypted ->  Update Database ()
 addVolunteer vol
     = do Database volunteers <- get
          put $ Database (vol:volunteers)
+         
+getVolunteers :: Query Database [VolunteerEncrypted]
+getVolunteers = do Database volunteers <- ask
+                   return volunteers
 
 data Volunteer = Volunteer
      {alias   :: T.Text
