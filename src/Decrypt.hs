@@ -13,10 +13,7 @@ import           Control.Monad.Trans
 import           Data.Acid
 import           Data.ByteString.Lazy (toStrict, toChunks )
 import           Data.SafeCopy
-
-deriveSafeCopy 0 'base ''Database
-makeAcidic ''Database['getVolunteers]
-
+import           Application
 
 decryptfieldText :: PrivateKey-> B.ByteString -> Text 
 decryptfieldText key field = E.decodeUtf8 $ toStrict $ RSA.decrypt key ( L.pack $ B.unpack field)
@@ -36,9 +33,9 @@ throwLeftDecode (Right (OpenSshPrivateKeyRsa k )) = k
 throwLeftDecode (Right _) = error "Wrong key type"
 throwLeftDecode (Left s)  = error $ "Error reading keys: " ++ s
 
-main:: IO [()]
+main:: IO ()
 main = do
   key_text <-liftIO $ Prelude.readFile "Volunteers"
-  database <- openLocalStateFrom "state/" (Database [])
+  database <- openLocalStateFrom "state/Database/" (Database [])
   vols <- query database GetVolunteers
-  mapM print.show $ fmap (decryptVolunteer $ throwLeftDecode $ decodePrivate $ B.pack key_text) vols
+  print $ fmap show $ fmap (decryptVolunteer $ throwLeftDecode $ decodePrivate $ B.pack key_text) vols
