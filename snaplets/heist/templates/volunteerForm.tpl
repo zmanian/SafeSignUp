@@ -18,6 +18,7 @@
     <header class="inner">
                <img src="../img/pic-10sfbay1.png" href="https://restorethefourthsf.com" alt="Restore the Fourth" style="width:140px;"/> <h1 id="project_title">RSAC Convention Volunteer Sign Up</h1>
 
+    <p>Volunteers signed up: <count>0</count> </p>
     </header>
     </div>
 
@@ -36,7 +37,7 @@
 
 <h3>Protections for volunteers</h3>
 
-<p>We've attempted to protect our users by encrypting Volunteer data both over the wire and at rest from this form. This form is only served over a TLS connection. User data is the encrypted in the database. Decryption of volunteer data will only occur on devices in the personal possession of the organizers. See the source code on <a href="https://github.com/zmanian/SafeSignUp/">Github</a></p>
+<p>We've attempted to protect our users by encrypting Volunteer data both over the wire and at rest from this form. This form is only served over a TLS connection. User data is the encrypted in the database. Decryption of volunteer data will only occur on devices in the personal possession of the organizers. See the source code on <a href="https://github.com/zmanian/SafeSignUp/">Github</a>.</p>
 
 
 

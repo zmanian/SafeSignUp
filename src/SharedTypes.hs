@@ -1,7 +1,7 @@
 {-# LANGUAGE RecordWildCards #-}
 {-# LANGUAGE DeriveDataTypeable  #-}
 
-module SharedTypes(Volunteer(..),VolunteerEncrypted(..), Database(..), putCopy, getCopy,addVolunteer, getVolunteers) where
+module SharedTypes(Volunteer(..),VolunteerEncrypted(..), Database(..), putCopy, getCopy,addVolunteer, getVolunteers,numOfVolunteers) where
 
 import qualified Data.Text as T
 import           Data.ByteString (ByteString)
@@ -26,6 +26,10 @@ addVolunteer vol
 getVolunteers :: Query Database [VolunteerEncrypted]
 getVolunteers = do Database volunteers <- ask
                    return volunteers
+
+numOfVolunteers :: Query Database Int
+numOfVolunteers = do Database volunteers <- ask
+                     return $ length volunteers
 
 data Volunteer = Volunteer
      {alias   :: T.Text

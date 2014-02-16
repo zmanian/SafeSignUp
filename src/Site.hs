@@ -35,10 +35,12 @@ import           Crypto.Random
 import           SharedTypes
 import           Snap.Snaplet.AcidState (Update, Query, Acid, HasAcid (getAcidStore), makeAcidic, update, query, acidInit)
 import           Control.Monad.Trans
+import qualified Text.XmlHtml as X
+
 ------------------------------------------------------------------------------
 -- | The application's routes.
 routes :: [(ByteString, Handler App App ())]
-routes = [("/volunteerForm", form),("", serveDirectory "static")] 
+routes = [("/volunteerForm", form),("/numOfVolunteers",writeText . T.pack . show =<< query NumOfVolunteers), ("", serveDirectory "static")] 
 
 
 
@@ -69,7 +71,9 @@ volunteerForm = Volunteer
     <*> "Feb_26th_Morning" .: choice [(True, "Yes"), (False, "No")] Nothing
     <*> "Feb_26th_Lunch" .: choice [(True, "Yes"), (False, "No")] Nothing
 
-
+countSplice ::Monad n => Int -> I.Splice n
+countSplice i = I.textSplice $ T.pack $ show i
+            
 form :: Handler App App ()
 form = do
     liftIO $ print "Form"
@@ -79,7 +83,8 @@ form = do
                          new_gen <- liftIO $ newGenIO
                          update (AddVolunteer (encryptVolunteer new_gen new_vol (throwLeftDecode $ decodePublic (toStrict $ pack key_text))))
                          writeBS "Success! and Encrypted"
-      Nothing -> heistLocal (bindDigestiveSplices view) $ render "volunteerForm"
+      Nothing -> do num <- query NumOfVolunteers
+                    heistLocal (I.bindSplice "count" (countSplice num) . bindDigestiveSplices view) $ render "volunteerForm"
 
 ------------------------------------------------------------------------------
 -- | The application initializer.
