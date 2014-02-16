@@ -76,8 +76,8 @@ countSplice i = I.textSplice $ T.pack $ show i
             
 form :: Handler App App ()
 form = do
-    liftIO $ print "Form"
-    (view, result) <- runForm "volunteerForm" volunteerForm
+    -- liftIO $ print "Form"
+    (view, result) <- runForm "RSACform" volunteerForm
     case result of
       Just new_vol -> do key_text <-liftIO $ readFile "Volunteers.pub_key"
                          new_gen <- liftIO $ newGenIO
