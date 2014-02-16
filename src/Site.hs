@@ -40,7 +40,7 @@ import qualified Text.XmlHtml as X
 ------------------------------------------------------------------------------
 -- | The application's routes.
 routes :: [(ByteString, Handler App App ())]
-routes = [("/volunteerForm", form),("/numOfVolunteers",writeText . T.pack . show =<< query NumOfVolunteers), ("", serveDirectory "static")] 
+routes = [("/RSACform", form),("/numOfVolunteers",writeText . T.pack . show =<< query NumOfVolunteers), ("", serveDirectory "static")] 
 
 
 
