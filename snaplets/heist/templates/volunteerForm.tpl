@@ -32,7 +32,7 @@
 <p> We will be asking attendees to wear badge ribbons with the text. " I Support the 4th" or "RSA Sold Us Out" and distributing a flyer describing RSA's misdeeds. </p> <img src="../SafeSignUp/img/BadgeRibbon.png"/>
 
 <h3> What did RSA do?</h3>
-<p>RSA is creator a widely used cryptography library called BSAFE. From 2004-2011, the default settings on that library were insecure from the NSA. Customers of RSA were delivering their secrets to NSA unwittingly when they believed they were buying secure communications software. Reuters obtained the contract that shows that the NSA specified an random number generator called Dual_EC_DRBG and paid $10 million to RSA for this to be the default.</p>
+<p>RSA is the creator of a widely used cryptography library called BSAFE. From 2004-2011, the default settings on that library were insecure from the NSA. Customers of RSA were delivering their private keys to NSA unwittingly when they believed they were buying secure communications software. Reuters obtained the contract that shows that the NSA specified an random number generator called Dual_EC_DRBG and paid $10 million to RSA for this to be the default.</p>
 
 
 <h3>Protections for volunteers</h3>
