@@ -1,7 +1,7 @@
 {-# LANGUAGE RecordWildCards #-}
 {-# LANGUAGE DeriveDataTypeable  #-}
 
-module SharedTypes(Volunteer(..),VolunteerEncrypted(..), Database(..), putCopy, getCopy,addVolunteer, getVolunteers,numOfVolunteers) where
+module SharedTypes(Attendee(..),AttendeeEncrypted(..), Database(..), putCopy, getCopy,addAttendee, getAttendees,numOfAttendees) where
 
 import qualified Data.Text as T
 import           Data.ByteString (ByteString)
@@ -16,44 +16,36 @@ import           Snap.Snaplet.AcidState (Update, Query, Acid,
 
 
 
-data Database = Database [VolunteerEncrypted] deriving(Show, Typeable)
+data Database = Database [AttendeeEncrypted] deriving(Show, Typeable)
 
-addVolunteer :: VolunteerEncrypted ->  Update Database ()
-addVolunteer vol
-    = do Database volunteers <- get
-         put $ Database (vol:volunteers)
+addAttendee :: AttendeeEncrypted ->  Update Database ()
+addAttendee vol
+    = do Database attendee <- get
+         put $ Database (vol:attendee)
          
-getVolunteers :: Query Database [VolunteerEncrypted]
-getVolunteers = do Database volunteers <- ask
-                   return volunteers
+getAttendees :: Query Database [AttendeeEncrypted]
+getAttendees = do Database attendees <- ask
+                  return attendees
 
-numOfVolunteers :: Query Database Int
-numOfVolunteers = do Database volunteers <- ask
-                     return $ length volunteers
+numOfAttendees :: Query Database Int
+numOfAttendees = do Database attendees <- ask
+                    return $ length attendees
 
-data Volunteer = Volunteer
-     {alias   :: T.Text
+data Attendee = Attendee
+     {name   :: T.Text
     , emailAddress :: T.Text
-    , phoneNumber  :: T.Text
-    , feb24thNight  :: Bool
-    , feb25thMorning  :: Bool
-    , feb25thLunch  :: Bool
-    , feb26thMorning  :: Bool
-    , feb26thLunch  :: Bool
+    , library  :: T.Text
     } deriving (Show,Typeable)
 
-data VolunteerEncrypted = VolunteerEncrypted
-    {enc_alias   :: ByteString
+data AttendeeEncrypted = AttendeeEncrypted
+    {enc_name   :: ByteString
     , enc_emailAddress :: ByteString
-    , enc_phoneNumber  :: ByteString
-    , enc_feb24thNight  :: ByteString
-    , enc_feb25thMorning  :: ByteString
-    , enc_feb25thLunch  :: ByteString
-    , enc_feb26thMorning  :: ByteString
-    , enc_feb26thLunch  :: ByteString
+    , enc_library  :: ByteString
     } deriving (Show,Typeable)
 
-instance SafeCopy VolunteerEncrypted where
-    putCopy VolunteerEncrypted{..} = contain $ do safePut enc_alias; safePut enc_emailAddress; safePut enc_feb24thNight; safePut enc_feb24thNight; safePut enc_feb25thMorning; safePut enc_feb25thLunch;safePut enc_feb26thMorning;safePut enc_feb26thLunch;
-    getCopy = contain $ VolunteerEncrypted <$> safeGet <*> safeGet<*> safeGet <*> safeGet<*> safeGet<*> safeGet <*> safeGet<*> safeGet
+instance SafeCopy AttendeeEncrypted where
+    
+    putCopy AttendeeEncrypted{..} = contain $ do safePut enc_name; safePut enc_emailAddress; safePut enc_library;
+    
+    getCopy = contain $ AttendeeEncrypted <$> safeGet <*> safeGet<*> safeGet
 

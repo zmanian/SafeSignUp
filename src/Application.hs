@@ -19,7 +19,7 @@ import Data.SafeCopy
 import Control.Applicative
 
 deriveSafeCopy 0 'base ''Database
-makeAcidic ''Database['addVolunteer,'getVolunteers,'numOfVolunteers]
+makeAcidic ''Database['addAttendee,'getAttendees,'numOfAttendees]
 
 
 ------------------------------------------------------------------------------
