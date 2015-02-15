@@ -16,8 +16,6 @@
 <link rel="stylesheet" id="font-awesome-css" href="https://libraryfreedomproject.org/wp-content/themes/hemlock/css/Font-Awesome-4.2.0/css/font-awesome.min.css?ver=4.1" type="text/css" media="all">
 <link rel="stylesheet" id="default_headings_font-css" href="//fonts.googleapis.com/css?family=Open+Sans%3A300italic%2C400italic%2C700italic%2C400%2C700%2C300&amp;subset=latin%2Ccyrillic-ext&amp;ver=4.1" type="text/css" media="all">
 <link rel="stylesheet" id="default_body_font-css" href="//fonts.googleapis.com/css?family=Crimson+Text%3A400%2C700%2C400italic%2C700italic&amp;ver=4.1" type="text/css" media="all">
-<div class="fit-vids-style">­<style> .fluid-width-video-wrapper { width: 100%; position: relative; padding: 0; } .fluid-width-video-wrapper iframe, .fluid-width-video-wrapper object, .fluid-width-video-wrapper embed { position: absolute; top: 0; left: 0; width: 100%; height: 100%; } </style>
-</div>
     <title>Library Freedom Unconference Signup</title>
 </head>
 <body>
@@ -36,7 +34,7 @@
 
 <h3>Protections for Attendees</h3>
 
-<p>We've attempted to protect our users by encrypting Volunteer data both over the wire and at rest from this form. This form is only served over a TLS connection. User data is encrypted in the database. Decryption of volunteer data will only occur on devices in the personal possession of the organizers. See the source code on <a href="https://github.com/zmanian/SafeSignUp/">Github</a>.</p>
+<p>We've attempted to protect our users by encrypting attendee data both over the wire and at rest from this form. This form is only served over a TLS connection. User data is encrypted in the database. Decryption of volunteer data will only occur on devices in the personal possession of the organizers. See the source code on <a href="https://github.com/zmanian/SafeSignUp/">Github</a>.</p>
 
 
 
