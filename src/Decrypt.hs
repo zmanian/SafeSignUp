@@ -34,7 +34,7 @@ throwLeftDecode (Left s)  = error $ "Error reading keys: " ++ s
 
 main:: IO ()
 main = do
-  key_text <-liftIO $ Prelude.readFile "Libary.privkey"
+  key_text <-liftIO $ Prelude.readFile "Library"
   database <- openLocalStateFrom "state/Database/" (Database [])
   vols <- query database GetAttendees
   print $ fmap show $ fmap (decryptAttendee $ throwLeftDecode $ decodePrivate $ B.pack key_text) vols

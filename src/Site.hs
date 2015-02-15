@@ -40,7 +40,7 @@ import qualified Text.XmlHtml as X
 ------------------------------------------------------------------------------
 -- | The application's routes.
 routes :: [(ByteString, Handler App App ())]
-routes = [("/LibraryFreedomForm", form),("/numOfAttendees",writeText . T.pack . show =<< query NumOfAttendees), ("/SafeSignUp", serveDirectory "static")]
+routes = [("LibraryFreedomForm", form),("numOfAttendees",writeText . T.pack . show =<< query NumOfAttendees), ("LibraryFreedomFormStatic", serveDirectory "static"),("", form)]
 
 
 
@@ -71,15 +71,15 @@ countSplice i = I.textSplice $ T.pack $ show i
             
 form :: Handler App App ()
 form = do
-    -- liftIO $ print "Form"
+    liftIO $ print "Form"
     (view, result) <- runForm "LibraryFreedomForm" attendeeForm
     case result of
-      Just new_vol -> do key_text <-liftIO $ readFile "Library.pub_key"
+      Just new_vol -> do key_text <-liftIO $ readFile "Library.pub"
                          new_gen <- liftIO $ newGenIO
                          update (AddAttendee (encryptAttendee new_gen new_vol (throwLeftDecode $ decodePublic (toStrict $ pack key_text))))
-                         writeBS "Success! and Encrypted"
+                         serveFile "static/thankyou.html"
       Nothing -> do num <- query NumOfAttendees
-                    heistLocal (I.bindSplice "count" (countSplice num) . bindDigestiveSplices view) $ render "LibraryFreedomForm"
+                    heistLocal (I.bindSplice "count" (countSplice num) . bindDigestiveSplices view) $ render "libraryForm"
 
 ------------------------------------------------------------------------------
 -- | The application initializer.

@@ -35,13 +35,17 @@ data Attendee = Attendee
      {name   :: T.Text
     , emailAddress :: T.Text
     , library  :: T.Text
-    } deriving (Show,Typeable)
+    } deriving (Typeable)
 
 data AttendeeEncrypted = AttendeeEncrypted
     {enc_name   :: ByteString
     , enc_emailAddress :: ByteString
     , enc_library  :: ByteString
     } deriving (Show,Typeable)
+
+instance Show Attendee where
+  show attendee = (T.unpack $ name attendee) ++"," ++ (T.unpack $ emailAddress attendee ) ++"," ++ (T.unpack $ library attendee)
+
 
 instance SafeCopy AttendeeEncrypted where
     
